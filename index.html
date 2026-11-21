@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZiyoCRM — O‘quv Markaz Platformasi</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-logo">Z</div>
+        <div>
+          <h1>ZiyoCRM</h1>
+          <p>O‘quv markaz tizimi</p>
+        </div>
+      </div>
+
+      <div class="cabinet-box">
+        <label for="cabinetSelect">Kabinet</label>
+        <select id="cabinetSelect">
+          <option value="admin">Admin CRM</option>
+          <option value="teacher">O‘qituvchi kabineti</option>
+          <option value="student">O‘quvchi kabineti</option>
+        </select>
+      </div>
+
+      <nav class="nav" id="sidebarNav">
+        <div class="nav-title">Asosiy</div>
+        <button class="nav-btn active" data-page="dashboard">Dashboard</button>
+        <button class="nav-btn" data-page="groups">Guruhlar</button>
+        <button class="nav-btn" data-page="courses">Kurslar</button>
+        <button class="nav-btn" data-page="students">O‘quvchilar</button>
+
+        <div class="nav-title">Moliya</div>
+        <button class="nav-btn" data-page="payments">To‘lovlar</button>
+        <button class="nav-btn" data-page="debtors">Qarzdorlar</button>
+        <button class="nav-btn" data-page="payroll">Oylik</button>
+
+        <div class="nav-title">Qo‘shimcha</div>
+        <button class="nav-btn" data-page="deleted">O‘chirilganlar</button>
+        <button class="nav-btn" data-page="profile">Profil</button>
+      </nav>
+    </aside>
+
+    <!-- Main Area -->
+    <div class="main">
+      <!-- Navbar -->
+      <header class="navbar">
+        <div class="nav-left">
+          <button class="menu-btn" id="menuBtn" title="Menyu">☰</button>
+          <div>
+            <h2 id="pageTitle">Dashboard</h2>
+            <p class="subtitle">Toshkent · Chilonzor filiali</p>
+          </div>
+        </div>
+
+        <div class="nav-right">
+          <button class="btn-outline" id="themeBtn">Tungi rejim</button>
+          <button class="btn-primary" id="openGroupModalBtn">+ Guruh qo‘shish</button>
+          <div class="director-chip">
+            <img
+              src="https://api.dicebear.com/9.x/avataaars/svg?seed=Ibrohimjon"
+              alt="Rahmiddinov Ibrohimjon"
+            />
+            <div>
+              <strong>Rahmiddinov Ibrohimjon</strong>
+              <span>Markaz direktori</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dynamic Content -->
+      <main class="content" id="contentArea"></main>
+    </div>
+  </div>
+
+  <!-- Create Group Modal -->
+  <div class="modal-backdrop" id="groupModal">
+    <div class="modal">
+      <div class="modal-head">
+        <h3>Yangi guruh qo‘shish</h3>
+        <button class="close-btn" id="closeGroupModal">✕</button>
+      </div>
+      <form id="groupForm" class="form-grid">
+        <div>
+          <label>Guruh nomi</label>
+          <input type="text" id="gName" required placeholder="Masalan: Frontend-31" />
+        </div>
+        <div>
+          <label>Kurs nomi</label>
+          <input type="text" id="gCourse" required placeholder="Masalan: Frontend React" />
+        </div>
+        <div>
+          <label>Dars kunlari</label>
+          <div class="day-toggle">
+            <button type="button" class="day-opt active" data-day="GCHJ">GCHJ (Dush-Chor-Juma)</button>
+            <button type="button" class="day-opt" data-day="SPSH">SPSH (Sesh-Pay-Shan)</button>
+          </div>
+        </div>
+        <div>
+          <label>Dars vaqti</label>
+          <input type="text" id="gTime" required value="14:00 - 16:00" />
+        </div>
+        <div>
+          <label>Oylik to‘lov (so‘m)</label>
+          <input type="number" id="gFee" required value="1200000" step="50000" />
+        </div>
+        <div>
+          <label>Maksimal o‘quvchi soni</label>
+          <input type="number" id="gMax" required value="15" min="1" max="50" />
+        </div>
+        <div>
+          <label>O‘qituvchi</label>
+          <input type="text" id="gTeacher" required value="Alisher Karimov" />
+        </div>
+        <div>
+          <label>Karta rangi</label>
+          <select id="gColor">
+            <option value="blue">Ko‘k</option>
+            <option value="rose">Qizil</option>
+            <option value="amber">To‘q sariq</option>
+            <option value="emerald">Yashil</option>
+          </select>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-outline" id="cancelGroupModal">Bekor qilish</button>
+          <button type="submit" class="btn-primary">Saqlash</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Full-Screen Group Detail Modal -->
+  <div class="fullscreen-modal" id="fullGroupModal">
+    <div class="fs-header">
+      <div>
+        <h2 id="fsGroupName">Guruh nomi</h2>
+        <p id="fsGroupMeta" class="subtitle"></p>
+      </div>
+      <button class="close-btn" id="closeFullModal">✕</button>
+    </div>
+
+    <div class="fs-body">
+      <div class="fs-container">
+        <!-- 4 Summary Cards -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <span>Guruh nomi</span>
+            <strong id="fsCardName">—</strong>
+          </div>
+          <div class="kpi-card">
+            <span>Dars kunlari va vaqti</span>
+            <strong id="fsCardDays">—</strong>
+          </div>
+          <div class="kpi-card">
+            <span>Kurs nomi va narxi</span>
+            <strong id="fsCardPrice" class="text-green">—</strong>
+          </div>
+          <div class="kpi-card">
+            <span>O‘qituvchi va sig‘im</span>
+            <strong id="fsCardCapacity">—</strong>
+          </div>
+        </div>
+
+        <!-- Enrolled Students Panel -->
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>Guruhga biriktirilgan o‘quvchilar</h3>
+              <p class="subtitle">O‘quvchi qo‘shish va davomatni belgilash</p>
+            </div>
+            <form id="addStudentInlineForm" class="inline-form">
+              <input type="text" id="inlineStudentName" required placeholder="O‘quvchi F.I.O." />
+              <input type="text" id="inlineStudentPhone" required placeholder="+998 90 ..." value="+998 90 " />
+              <button type="submit" class="btn-primary">+ O‘quvchi qo‘shish</button>
+            </form>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>F.I.O.</th>
+                  <th>Telefon</th>
+                  <th>Balans</th>
+                  <th>Davomat</th>
+                </tr>
+              </thead>
+              <tbody id="fsStudentsBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
